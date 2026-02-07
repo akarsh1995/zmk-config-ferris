@@ -21,3 +21,6 @@
 include:
   - board: nice_nano_v2
     shield: akeeb
+    snippet: zmk-usb-logging
+
+
