@@ -38,10 +38,10 @@
             ;
 
         row-gpios
-            = <&mcp_io 7 GPIO_ACTIVE_LOW>
-            , <&mcp_io 4 GPIO_ACTIVE_LOW>
-            , <&mcp_io 3 GPIO_ACTIVE_LOW>
-            , <&mcp_io 2 GPIO_ACTIVE_LOW>
+            = <&mcp_io 7 GPIO_ACTIVE_HIGH>
+            , <&mcp_io 4 GPIO_ACTIVE_HIGH>
+            , <&mcp_io 3 GPIO_ACTIVE_HIGH>
+            , <&mcp_io 2 GPIO_ACTIVE_HIGH>
             ;
     };
 };
