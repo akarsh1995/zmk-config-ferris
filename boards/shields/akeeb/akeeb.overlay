@@ -37,10 +37,10 @@
             ;
 
         row-gpios
-            = <&mcp_io 7 GPIO_ACTIVE_LOW>
-            , <&mcp_io 4 GPIO_ACTIVE_LOW>
-            , <&mcp_io 3 GPIO_ACTIVE_LOW>
-            , <&mcp_io 2 GPIO_ACTIVE_LOW>
+            = <&mcp_io 7 GPIO_ACTIVE_HIGH>
+            , <&mcp_io 4 GPIO_ACTIVE_HIGH>
+            , <&mcp_io 3 GPIO_ACTIVE_HIGH>
+            , <&mcp_io 2 GPIO_ACTIVE_HIGH>
             ;
     };
 };
@@ -53,8 +53,10 @@
         compatible = "microchip,mcp230xx";
         status = "okay";
         gpio-controller;
+        wakeup-source;
         reg = <0x20>;
         #gpio-cells = <2>;
         ngpios = <16>;
+        int-gpios = <&pro_micro 0 (GPIO_ACTIVE_LOW | GPIO_PULL_UP)>;
     };
 };
