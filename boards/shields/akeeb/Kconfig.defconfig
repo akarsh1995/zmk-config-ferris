@@ -6,7 +6,4 @@ if SHIELD_AKEEB
 config ZMK_KEYBOARD_NAME
     default "Akeeb"
 
-config ZMK_KSCAN_MATRIX_POLLING
-    default y
-
 endif

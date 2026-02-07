@@ -1,44 +1,66 @@
 # Akeeb Shield for ZMK
 
-Akeeb keyboard configuration using nice!nano v2 with MCP23017 I/O expander.
+Single-controller keyboard with MCP23017 I/O expander for right half.
 
 ## Hardware
 
-- **1x nice!nano v2** controller
-- **1x MCP23017** I2C GPIO expander (address 0x20)
+- **1× nice!nano v2** controller (mounted on left half)
+- **1× MCP23017** I2C GPIO expander (mounted on right half, address 0x20)
+- **I2C cable** connecting left and right halves (4 wires: SDA, SCL, VCC, GND)
 - Akeeb keyboard (34 keys: 4 rows × 10 columns)
-- **Left 5 columns**: Direct to nice!nano GPIO
-- **Right 5 columns**: Via MCP23017 expander
+
+## Architecture
+
+This is a **unified keyboard** with one controller using composite kscan:
+- **Left half**: 4 rows + 5 columns wired directly to nice!nano GPIO
+- **Right half**: 4 rows + 5 columns wired to MCP23017 GPIO via I2C cable
+- Each half is scanned independently, then combined by ZMK
 
 ## Building
+
+GitHub Actions builds automatically. Or build locally:
 
 ```bash
 west build -b nice_nano_v2 -- -DSHIELD=akeeb
 ```
 
-Or let GitHub Actions build automatically.
-
 ## Flashing
 
-1. Double-tap reset button on nice!nano v2
-2. Drag `zmk.uf2` to the USB drive
+1. Double-tap reset on nice!nano v2 (on left half)
+2. Drag `build/zephyr/zmk.uf2` to USB drive that appears
+3. Only left half needs flashing (right half is passive)
 
 ## Pin Configuration
 
-Update GPIO pins in `akeeb.overlay` to match your wiring:
+### nice!nano GPIO (Left Half)
+**Rows**: pro_micro pins 6, 7, 8, 9  
+**Columns**: pro_micro pins 21, 20, 19, 18, 15
 
-### Left Half (Direct to nice!nano)
-**Rows**: D7, D8, D9, D10  
-**Columns**: D1, D0, D2, D3, D4
-
-### Right Half (MCP23017)
-**Columns**: GPIO 7, 6, 5, 4, 3 (GPA7-GPA3)
+### MCP23017 GPIO (Right Half)
+**Rows**: GPIO pins 8, 9, 10, 11  
+**Columns**: GPIO pins 3, 4, 5, 6, 7
 
 ### I2C Connection
-- **SDA**: Default I2C pin on nice!nano
-- **SCL**: Default I2C pin on nice!nano  
-- **MCP23017 Address**: 0x20
+Connect left and right halves with 4-wire cable:
+- nice!nano Pin 2 (P0.17/SDA) → MCP23017 Pin 13 (SDA)
+- nice!nano Pin 3 (P0.20/SCL) → MCP23017 Pin 12 (SCL)
+- VCC → VCC (3.3V)
+- GND → GND
 
-Adjust pins in the overlay to match your actual PCB layout.
+**MCP23017 I2C Address:** 0x20  
+**Clock Speed:** 400kHz (I2C_BITRATE_FAST)
 
-I2C is on the default nice!nano I2C pins (pro_micro_i2c).
+## Wiring Summary
+
+1. **Left half wiring**: Connect row and column switches to nice!nano GPIO
+   - Rows → pins 6, 7, 8, 9
+   - Columns → pins 21, 20, 19, 18, 15
+
+2. **Right half wiring**: Connect row and column switches to MCP23017 GPIO
+   - Rows → GPIO 8, 9, 10, 11
+   - Columns → GPIO 3, 4, 5, 6, 7
+
+3. **I2C cable**: 4-wire cable between nice!nano (pins 2/3 + power) and MCP23017 (SDA/SCL + power)
+
+Update pin assignments in `akeeb.overlay` to match your actual PCB wiring.
+
