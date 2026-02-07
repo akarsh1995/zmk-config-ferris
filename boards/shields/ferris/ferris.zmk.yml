@@ -1,0 +1,9 @@
+file_format: "1"
+id: ferris_shield
+name: Ferris
+type: shield
+url: https://github.com/pierrechevalier83/ferris
+requires: [pro_micro]
+features:
+  - keys
+siblings: []
